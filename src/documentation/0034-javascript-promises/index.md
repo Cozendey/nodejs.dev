@@ -153,7 +153,7 @@ Running `fetch()` returns a [response](https://fetch.spec.whatwg.org/#concept-re
 * `status`, a numeric value representing the HTTP status code
 * `statusText`, a status message, which is `OK` if the request succeeded
 
-`response` also has a `json()` method, which returns a promise that will resolve with the content of the body processed and transformed into JSON.
+`response` also has a `json()` method, which returns a promise that will resolve to a parsed JSON object.
 
 So given those promises, this is what happens: the first promise in the chain is a function that we defined, called `status()`, that checks the response status and if it's not a success response (between 200 and 299), it rejects the promise.
 
@@ -161,7 +161,7 @@ This operation will cause the promise chain to skip all the chained promises lis
 
 If that succeeds instead, it calls the `json()` function we defined. Since the previous promise, when successful, returned the `response` object, we get it as an input to the second promise.
 
-In this case, we return the data JSON processed, so the third promise receives the JSON directly:
+The second promise then returns a third promise that resolves to a parsed JSON object:
 
 ```js
 .then((data) => {
@@ -246,7 +246,7 @@ You are not limited to using `fetch` of course, **any promise can be used in thi
 
 ### `Promise.race()`
 
-`Promise.race()` runs when the first of the promises you pass to it resolves, and it runs the attached callback just once, with the result of the first promise resolved.
+`Promise.race()` runs when the first of the promises you pass to it settles, and it runs the attached callback just once, with the result of the first promise that resolved or rejected.
 
 Example:
 
